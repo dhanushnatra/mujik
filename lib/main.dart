@@ -1,14 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:moozic/screens/Downloads/Downloads_Screen.dart';
-import 'package:moozic/screens/Home/Home_Screen.dart';
-import 'package:moozic/screens/Settings/Settings_Screen.dart';
+import 'package:hive_flutter/hive_flutter.dart';
+import 'package:moozic/screens/Downloads_Screen.dart';
+import 'package:moozic/screens/Home_Screen.dart';
+import 'package:moozic/screens/Settings_Screen.dart';
 import 'package:moozic/widgets/bottom_player.dart';
-import 'package:moozic/screens/Search/Search_screen.dart';
-import 'package:moozic/screens/Music/Music_Screen.dart';
+import 'package:moozic/screens/Search_screen.dart';
+import 'package:moozic/screens/Music_Screen.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 
 void main() {
+  Hive.initFlutter();
   runApp(const MyApp());
 }
 
@@ -33,7 +35,18 @@ class _MyAppState extends State<MyApp> {
   }
 
   @override
+  void initState() {
+    super.initState();
+  }
+
+  Future<bool> get isDarkMode async {
+    await Hive.openBox('settings');
+    return Hive.box('settings').get('darkMode', defaultValue: false);
+  }
+
+  @override
   Widget build(BuildContext context) {
+    print(isDarkMode);
     return MaterialApp(
       routes: {
         '/settings': (context) => const SettingsScreen(),
@@ -41,6 +54,7 @@ class _MyAppState extends State<MyApp> {
       },
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
+        primarySwatch: Colors.green,
         brightness: Brightness.light,
       ),
       darkTheme: ThemeData(
@@ -50,7 +64,6 @@ class _MyAppState extends State<MyApp> {
         bottomNavigationBar: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            BottomPlayer(),
             Container(
               margin: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
               child: GNav(
@@ -69,7 +82,7 @@ class _MyAppState extends State<MyApp> {
                   GButton(
                     icon: FontAwesomeIcons.home,
                     iconActiveColor: Colors.green,
-                    text: 'Home',
+                    text: 'home',
                     iconColor: Colors.green,
                     textColor: Colors.green,
                     iconSize: 24,
@@ -77,7 +90,7 @@ class _MyAppState extends State<MyApp> {
                   ),
                   GButton(
                     icon: FontAwesomeIcons.search,
-                    text: 'settings',
+                    text: 'search',
                     iconActiveColor: Colors.green,
                     iconColor: Colors.green,
                     textColor: Colors.green,

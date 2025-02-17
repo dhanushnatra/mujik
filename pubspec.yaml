@@ -36,6 +36,7 @@ dependencies:
   cupertino_icons: ^1.0.8
   just_audio : ^0.9.6
   audio_service: ^0.18.0
+  get: ^4.6.5
   provider: ^5.0.0
   http: ^0.13.3
   google_nav_bar: ^5.0.7
@@ -43,7 +44,7 @@ dependencies:
   rxdart: ^0.26.0
   hive: ^2.0.4
   hive_flutter: ^1.1.0
-  jiosaavn: ^0.1.0
+  dio: ^5.8.0
 
 
 dev_dependencies:
