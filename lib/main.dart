@@ -4,7 +4,6 @@ import 'package:hive_flutter/hive_flutter.dart';
 import 'package:moozic/screens/Downloads_Screen.dart';
 import 'package:moozic/screens/Home_Screen.dart';
 import 'package:moozic/screens/Settings_Screen.dart';
-import 'package:moozic/widgets/bottom_player.dart';
 import 'package:moozic/screens/Search_screen.dart';
 import 'package:moozic/screens/Music_Screen.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';

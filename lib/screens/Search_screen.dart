@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:moozic/api/saavn.dart';
-import 'package:moozic/widgets/Cards.dart';
+import 'package:moozic/widgets/cards/Music_Card.dart';
+import 'package:moozic/widgets/cards/Album_Card.dart';
 
 class SearchScreen extends StatefulWidget {
   const SearchScreen({super.key});
@@ -12,9 +13,14 @@ class SearchScreen extends StatefulWidget {
 class _SearchScreenState extends State<SearchScreen> {
   TextEditingController searchController = TextEditingController();
   bool isSearching = false;
+  fetch() {
+    fetchSongs(searchController.text);
+    fetchAlbums(searchController.text);
+  }
+
   _SearchScreenState() {
     searchController.addListener(() async {
-      if (searchController.text.length > 0) {
+      if (searchController.text.isNotEmpty) {
         await fetchSongs(searchController.text);
         setState(() {
           isSearching = true;
@@ -67,6 +73,53 @@ class _SearchScreenState extends State<SearchScreen> {
   }
 
   Widget _showresults() {
+    return DefaultTabController(
+      length: 2,
+      child: Column(
+        children: [
+          TabBar(
+            tabs: [
+              Tab(
+                text: 'Songs',
+              ),
+              Tab(
+                text: 'Albums',
+              ),
+            ],
+          ),
+          Expanded(
+            child: TabBarView(
+              children: [
+                _showsongss(),
+                _showalbumss(),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _showalbumss() {
+    return FutureBuilder(
+      future: fetchAlbums(searchController.text),
+      builder: (context, snapshot) {
+        if (snapshot.hasData) {
+          return ListView.builder(
+            itemCount: snapshot.data!.albums.length,
+            itemBuilder: (context, index) {
+              return AlbumCard(album: snapshot.data!.albums[index]);
+            },
+          );
+        } else if (snapshot.hasError) {
+          return Text('${snapshot.error}');
+        }
+        return Searching();
+      },
+    );
+  }
+
+  Widget _showsongss() {
     return FutureBuilder(
       future: fetchSongs(searchController.text),
       builder: (context, snapshot) {
